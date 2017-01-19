@@ -77,6 +77,40 @@
 
     <div class="container">
             <div class="col-sm-offset-2 col-sm-8">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        New TaskList
+                    </div>
+
+                    <div class="panel-body">
+                        <!-- Display Validation Errors -->
+                        @include('common.errors')
+
+                        <!-- New List Form -->
+                        <form action="{{ url('list') }}" method="POST" class="form-horizontal">
+                            {{ csrf_field() }}
+
+                            <!-- List Name -->
+                            <div class="form-group">
+                                <label for="list-name" class="col-sm-3 control-label">List</label>
+
+                                <div class="col-sm-6">
+                                    <input type="text" name="name" id="list-name" class="form-control" value="{{ old('list') }}">
+                                </div>
+                            </div>
+                            <!-- Add List Button -->
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-6">
+                                    <button type="submit" class="btn btn-default">
+                                        <i class="fa fa-btn fa-plus"></i>Add List
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         New Task
@@ -105,6 +139,18 @@
                                     <input type="text" name="description" id="task-description" class="form-control" value="{{ old('description') }}">
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label for="list-name" class="col-sm-3 control-label">List</label>
+
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="list-selector" name="list_id">
+                                    @foreach ($taskLists as $list)
+                                        <option>{{ $list->name }}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
                             <!-- Add Task Button -->
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-sm-6">
@@ -117,11 +163,11 @@
                     </div>
                 </div>
 
+                @foreach ($taskLists as $list)
                 <!-- Current Tasks -->
-                @if (count($tasks) > 0)
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Current Tasks
+                            Current Tasks :{{ $list->name}}
                         </div>
 
                         <div class="panel-body">
@@ -133,6 +179,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($tasks as $task)
+                                        @if( $task->list_id == $list->id)
                                         <tr>
                                             <td class="table-text"><div>{{ $task->name }}</div></td>
                                             <td class="table-text"><div>
@@ -141,7 +188,28 @@
                                                   data-title="Enter description">{{ $task->description }}</a>
                                             </div></td>
 
-
+                                            <td>
+                                                <form action="{{ url('changelist') }}" method="POST" class="form-horizontal">
+                                                    {{ csrf_field() }}
+                                                    <div class="form-group">
+                                                        <div class="col-sm-3">
+                                                            <select class="form-control" name="list_id">
+                                                            @foreach ($taskLists as $list)
+                                                                <option>{{ $list->name }}</option>
+                                                            @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Add Task Button -->
+                                                    <div class="form-group">
+                                                        <div class="col-sm-offset-3 col-sm-6">
+                                                            <button type="submit" class="btn btn-default">
+                                                                <i class="fa fa-btn fa-plus"></i>Change List
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </td>
 
                                             <!-- Task Delete Button -->
                                             <td>
@@ -154,13 +222,15 @@
                                                     </button>
                                                 </form>
                                             </td>
+
                                         </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                @endif
+                @endforeach
             </div>
         </div>
 

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Task;
+use App\TaskList;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -28,8 +29,8 @@ class User extends Authenticatable
     /**
      * Get all of the tasks for the user.
      */
-    public function tasks()
+    public function taskList()
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(TaskList::class);
     }
 }

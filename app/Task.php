@@ -3,6 +3,7 @@
 namespace App;
 
 use App\User;
+use App\TaskList;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
@@ -12,7 +13,7 @@ class Task extends Model
      *
      * @var array
      */
-    protected $fillable = ['name','description'];
+    protected $fillable = ['name','description', 'list_id'];
     
     /**
      * The attributes that should be cast to native types.
@@ -26,8 +27,10 @@ class Task extends Model
     /**
      * Get the user that owns the task.
      */
-    public function user()
+    public function taskList()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(TaskList::class);
     }
 }
+
+

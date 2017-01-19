@@ -8,7 +8,9 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Task;
+use App\TaskList;
 use App\Repositories\TaskRepository;
+use App\Repositories\TaskListRepository;
 
 class TaskController extends Controller
 {
@@ -18,6 +20,7 @@ class TaskController extends Controller
      * @var TaskRepository
      */
     protected $tasks;
+    protected $taskLists;
 
     /**
      * Create a new controller instance.
@@ -25,11 +28,12 @@ class TaskController extends Controller
      * @param  TaskRepository  $tasks
      * @return void
      */
-    public function __construct(TaskRepository $tasks)
+    public function __construct(TaskRepository $tasks, TaskListRepository $taskLists)
     {
         $this->middleware('auth');
 
         $this->tasks = $tasks;
+        $this->taskLists = $taskLists;
     }
 
     /**
@@ -42,6 +46,7 @@ class TaskController extends Controller
     {
         return view('tasks.index', [
             'tasks' => $this->tasks->forUser($request->user()),
+            'taskLists' => $this->taskLists->forUser($request->user())
         ]);
     }
 
@@ -55,12 +60,17 @@ class TaskController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
+            'list_id' => 'required'
         ]);
+        $list_id = TaskList::where('name', '=', $request->list_id)->get()[0]->id;
+        $task = new Task;
 
-        $request->user()->tasks()->create([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
+        $task->name = $request->name;
+        $task->description = $request->description;
+        $task->list_id = $list_id;
+        $task->user_id = $request->user()->id;
+
+        $task->save();
 
         return redirect('/tasks');
     }

@@ -17,6 +17,8 @@ class CreateTasksTable extends Migration
             $table->integer('user_id')->index();
             $table->string('name');
             $table->text('description');
+            $table->integer('list_id')->unsigned();
+            $table->foreign('list_id')->references('id')->on('task_lists');
             $table->timestamps();
         });
     }
