@@ -75,11 +75,20 @@ class TaskController extends Controller
         return redirect('/tasks');
     }
 
-    public function updateDescription(Request $request,$id)
+    public function updateList(Request $request, $id)
     {
-//        App\Task::where('name', $request->name)
-//                  ->update(['description' => $request->description]);
+        $list_id = TaskList::where('name', '=', $request->list_id)->get()[0]->id;
+        Task::where('id', '=', $id)
+            ->update(['list_id' => $list_id]);
         return redirect('/tasks');
+    }
+
+    public function updateDescription(Request $request, $id)
+    {
+
+        Task::where('id', '=' ,$id)
+                  ->update(['description' => $request->value]);
+//        return redirect('/tasks');
     }
 
     /**

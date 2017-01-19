@@ -189,20 +189,21 @@
                                             </div></td>
 
                                             <td>
-                                                <form action="{{ url('changelist') }}" method="POST" class="form-horizontal">
+                                                <form action="changelist/{{ $task->id }}" method="POST" class="form-horizontal">
                                                     {{ csrf_field() }}
                                                     <div class="form-group">
-                                                        <div class="col-sm-3">
+                                                        <div class="col-sm-4">
                                                             <select class="form-control" name="list_id">
-                                                            @foreach ($taskLists as $list)
-                                                                <option>{{ $list->name }}</option>
+                                                            @foreach ($taskLists as $list2)
+                                                                @if($list2->id == $task->list_id)
+                                                                    <option selected="selected">{{ $list2->name }}</option>
+                                                                @else
+                                                                    <option>{{ $list2->name }}</option>
+                                                                @endif
                                                             @endforeach
                                                             </select>
                                                         </div>
-                                                    </div>
-                                                    <!-- Add Task Button -->
-                                                    <div class="form-group">
-                                                        <div class="col-sm-offset-3 col-sm-6">
+                                                        <div class="col-sm-6">
                                                             <button type="submit" class="btn btn-default">
                                                                 <i class="fa fa-btn fa-plus"></i>Change List
                                                             </button>

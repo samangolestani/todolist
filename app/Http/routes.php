@@ -32,6 +32,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/task', 'TaskController@store');
 //    Route::get('/lists', 'ListController@index');
     Route::post('/list', 'ListController@store');
+    Route::post('/changelist/{task}', 'TaskController@updateList');
     Route::delete('/task/{task}', 'TaskController@destroy');
     Route::post('/task/{task}/update_description', 'TaskController@updateDescription');
 
