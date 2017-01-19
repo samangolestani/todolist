@@ -55,7 +55,6 @@ class TaskController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'description' => 'required|max:255',
         ]);
 
         $request->user()->tasks()->create([
@@ -63,6 +62,13 @@ class TaskController extends Controller
             'description' => $request->description,
         ]);
 
+        return redirect('/tasks');
+    }
+
+    public function updateDescription(Request $request,$id)
+    {
+//        App\Task::where('name', $request->name)
+//                  ->update(['description' => $request->description]);
         return redirect('/tasks');
     }
 

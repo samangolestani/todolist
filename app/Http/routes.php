@@ -31,6 +31,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/tasks', 'TaskController@index');
     Route::post('/task', 'TaskController@store');
     Route::delete('/task/{task}', 'TaskController@destroy');
+    Route::post('/task/{task}/update_description', 'TaskController@updateDescription');
 
     Route::auth();
 
